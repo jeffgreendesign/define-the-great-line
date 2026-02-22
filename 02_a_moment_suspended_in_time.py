@@ -29,10 +29,15 @@ def w(text="", end="\n"):
 
 def tprint(text, color="", delay=0.05, end="\n"):
     """Typewriter: emit each character with a delay."""
+    if color:
+        sys.stdout.write(color)
+        sys.stdout.flush()
     for char in text:
-        sys.stdout.write(color + char + RESET)
+        sys.stdout.write(char)
         sys.stdout.flush()
         time.sleep(delay)
+    if color:
+        sys.stdout.write(RESET)
     sys.stdout.write(end)
     sys.stdout.flush()
 
@@ -236,4 +241,10 @@ def a_moment_suspended_in_time():
 
 
 if __name__ == "__main__":
-    a_moment_suspended_in_time()
+    try:
+        a_moment_suspended_in_time()
+    finally:
+        sys.stdout.write("\033[?5l")  # restore normal video (undo any flash)
+        sys.stdout.write("\033[0m")   # reset all ANSI attributes
+        sys.stdout.write("\n")
+        sys.stdout.flush()
