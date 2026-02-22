@@ -47,8 +47,8 @@ def glitch(text, color, delay=0.035):
     noise = "█▓▒░▀▄▌▐▙▟"
     corrupted = ""
     for ch in text:
-        if ch != " " and random.random() < 0.3:
-            corrupted += random.choice(noise)
+        if ch != " " and random.random() < 0.3:  # noqa: S311
+            corrupted += random.choice(noise)  # noqa: S311
         else:
             corrupted += ch
     sys.stdout.write(MAGENTA + corrupted + RESET)
@@ -60,6 +60,8 @@ def glitch(text, color, delay=0.035):
 
 def flash(times=2, hold=0.06):
     """Invert the terminal video briefly."""
+    if not sys.stdout.isatty():
+        return
     for _ in range(times):
         sys.stdout.write("\033[?5h")
         sys.stdout.flush()
